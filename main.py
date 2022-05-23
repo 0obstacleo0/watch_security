@@ -251,7 +251,7 @@ def serach_sn():
 
 
 if __name__ == "__main__":
-    debug_flg = True
+    debug_flg = False
     err_msg = ""
     yester_day = dt.today().replace(
         hour=0, minute=0, second=0, microsecond=0
