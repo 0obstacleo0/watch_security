@@ -28,7 +28,7 @@ def get_content(url):
 
 
 # メール送信
-def make_mail(forest_lists, ipa_lists, jvn_lists, sn_lists, debug_flg=False):
+def make_mail(forest_lists, ipa_lists, jvn_lists, sn_lists):
     text = ""
     subject = "[セキュリティ監視君]"
     if len(forest_lists) != 0:
@@ -251,7 +251,7 @@ def serach_sn():
 
 
 if __name__ == "__main__":
-    debug_flg = False
+    debug_flg = True
     err_msg = ""
     yester_day = dt.today().replace(
         hour=0, minute=0, second=0, microsecond=0
