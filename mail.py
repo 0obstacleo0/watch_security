@@ -1,15 +1,13 @@
 import json
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.utils import formatdate
 
-json_file = open("settings.json", "r")
-json_data = json.load(json_file)
-
-FROM_ADDRESS = json_data["FROM_ADDRESS"]
-TO_ADDRESS = json_data["TO_ADDRESS"]
-PASSWORD = json_data["PASSWORD"]
-
+# 環境変数からパラメータ取得
+FROM_ADDRESS = os.environ["FROM_ADDRESS"]
+TO_ADDRESS = os.environ["TO_ADDRESS"]
+PASSWORD = os.environ["PASSWORD"]
 
 # メール送信
 def send_mail(subject, text):
