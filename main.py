@@ -186,7 +186,7 @@ def search_ipa():
 
 
 # JVN
-def serach_jvn():
+def search_jvn():
     list_article = []
     try:
         soup = get_content("https://jvn.jp")
@@ -216,7 +216,7 @@ def serach_jvn():
 
 
 # Security NEXT
-def serach_sn():
+def search_sn():
     list_article = []
     try:
         soup = get_content("https://www.security-next.com")
@@ -259,8 +259,8 @@ if __name__ == "__main__":
 
     forest_lists = search_forest()
     ipa_lists = search_ipa()
-    jvn_lists = serach_jvn()
-    sn_lists = serach_sn()
+    jvn_lists = search_jvn()
+    sn_lists = search_sn()
 
     if (len(forest_lists) + len(ipa_lists) + len(jvn_lists) + len(sn_lists)) != 0:
         make_mail(forest_lists, ipa_lists, jvn_lists, sn_lists)
