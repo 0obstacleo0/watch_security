@@ -19,7 +19,7 @@ jobs:
           pip install requests==2.23.0
       - name: Run script
         run: |
-          FROM_ADDRESS=${{ secrets.FROM_ADDRESS }}
-          PASSWORD=${{ secrets.PASSWORD }}
-          TO_ADDRESS=${{ secrets.TO_ADDRESS }}
+          FROM_ADDRESS=${{secrets.FROM_ADDRESS}}
+          PASSWORD=${{secrets.PASSWORD}}
+          TO_ADDRESS=${{secrets.TO_ADDRESS}}
           python main.py
