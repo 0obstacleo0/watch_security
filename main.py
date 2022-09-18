@@ -250,13 +250,7 @@ def search_sn():
     return list_article
 
 
-if __name__ == "__main__":
-    debug_flg = False
-    err_msg = ""
-    yester_day = dt.today().replace(
-        hour=0, minute=0, second=0, microsecond=0
-    ) + datetime.timedelta(days=-1)
-
+def run():
     forest_lists = search_forest()
     ipa_lists = search_ipa()
     jvn_lists = search_jvn()
@@ -264,3 +258,11 @@ if __name__ == "__main__":
 
     if (len(forest_lists) + len(ipa_lists) + len(jvn_lists) + len(sn_lists)) != 0:
         make_mail(forest_lists, ipa_lists, jvn_lists, sn_lists)
+
+
+# 変数
+debug_flg = False
+err_msg = ""
+yester_day = dt.today().replace(
+    hour=0, minute=0, second=0, microsecond=0
+) + datetime.timedelta(days=-1)
