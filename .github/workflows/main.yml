@@ -22,8 +22,10 @@ jobs:
           TO_ADDRESS: ${{ secrets.TO_ADDRESS }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TEST_TODAY: ${{ secrets.TEST_TODAY }}
+          HOGE: ${{ secrets.HOGE }}
         run: |
           echo $FROM_ADDRESS
           echo $GITHUB_TOKEN
           echo $TEST_TODAY
+          echo $HOGE
           python main.py
