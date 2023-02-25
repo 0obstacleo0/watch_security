@@ -19,6 +19,6 @@ jobs:
         run: |
           python main.py
         env:
-          FROM_ADDRESS: ${{secrets.FROM_ADDRESS}}
-          PASSWORD: ${{secrets.PASSWORD}}
-          TO_ADDRESS: ${{secrets.TO_ADDRESS}}          
+          FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          TO_ADDRESS: ${{ secrets.TO_ADDRESS }}          
