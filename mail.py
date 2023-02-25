@@ -9,10 +9,11 @@ FROM_ADDRESS = os.environ["FROM_ADDRESS"]
 TO_ADDRESS = os.environ["TO_ADDRESS"]
 PASSWORD = os.environ["PASSWORD"]
 
-print(FROM_ADDRESS)
-
 # メール送信
-#def send_mail(subject, text):
+def send_mail(subject, text):
+    print(FROM_ADDRESS)
+    print(TO_ADDRESS)
+    print(PASSWORD)
 #    smtpobj = smtplib.SMTP("smtp.gmail.com", 587)
 #    smtpobj.starttls()
 #    smtpobj.login(FROM_ADDRESS, PASSWORD)
