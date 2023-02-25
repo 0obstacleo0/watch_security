@@ -4,6 +4,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: python-watch-security
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.9
@@ -17,9 +19,8 @@ jobs:
           pip install requests==2.23.0
       - name: Run script
         run: |
-          echo $FROM_ADDRESS
           python main.py
         env:
           FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          TO_ADDRESS: ${{ secrets.TO_ADDRESS }}          
+          TO_ADDRESS: ${{ secrets.TO_ADDRESS }}
