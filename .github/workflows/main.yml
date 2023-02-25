@@ -17,6 +17,7 @@ jobs:
           pip install requests==2.23.0
       - name: Run script
         run: |
+          echo $FROM_ADDRESS
           python main.py
         env:
           FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
