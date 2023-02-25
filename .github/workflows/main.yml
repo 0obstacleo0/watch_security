@@ -16,10 +16,10 @@ jobs:
           pip install beautifulsoup4==4.10.0
           pip install requests==2.23.0
       - name: Run script
-        run: |
-          echo $FROM_ADDRESS
-          python main.py
         env:
           FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
           PASSWORD: ${{ secrets.PASSWORD }}
           TO_ADDRESS: ${{ secrets.TO_ADDRESS }}          
+        run: |
+          echo $FROM_ADDRESS
+          python main.py
