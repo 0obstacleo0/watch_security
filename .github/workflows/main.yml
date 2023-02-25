@@ -21,6 +21,7 @@ jobs:
         run: |
           python main.py
         env:
+          TZ: "Asia/Tokyo"
           FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
           PASSWORD: ${{ secrets.PASSWORD }}
           TO_ADDRESS: ${{ secrets.TO_ADDRESS }}
