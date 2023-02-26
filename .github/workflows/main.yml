@@ -1,6 +1,6 @@
 name: watch_security_bot
 on:
-  # workflow_dispatch:
+  workflow_dispatch:
   schedule:
     - cron: "0 23 * * *"
 jobs:
