@@ -1,8 +1,9 @@
-import requests
 from bs4 import BeautifulSoup
 from datetime import datetime as dt
 import datetime
 import mail
+import ssl
+import urllib.request
 
 # 記事クラス
 class Article:
@@ -22,8 +23,12 @@ class Article:
 
 # html取得
 def get_content(url):
-    res = requests.get(url)
-    soup = BeautifulSoup(res.content, "html.parser")
+    # SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED 対応
+    ctx = ssl.create_default_context()
+    ctx.options |= 0x4
+
+    res = urllib.request.urlopen(url, context=ctx)
+    soup = BeautifulSoup(res, "html.parser")
     return soup
 
 
