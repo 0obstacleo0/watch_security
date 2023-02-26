@@ -150,7 +150,8 @@ def search_forest():
             url="https://forest.watch.impress.co.jp/category/security/",
             articles=list_article,
         )
-    except:
+    except Exception as e:
+        print(e)
         global err_msg
         err_msg += "・窓の杜\n"
 
@@ -178,7 +179,8 @@ def search_ipa():
             else:
                 article = Article(title, url, date)
                 list_article.append(article)
-    except:
+    except Exception as e:
+        print(e)
         global err_msg
         err_msg += "・IPA\n"
 
@@ -208,7 +210,8 @@ def search_jvn():
             else:
                 article = Article(title, url, date)
                 list_article.append(article)
-    except:
+    except Exception as e:
+        print(e)
         global err_msg
         err_msg += "・JVN\n"
 
@@ -243,7 +246,8 @@ def search_sn():
             else:
                 article = Article(title, url, date)
                 list_article.append(article)
-    except:
+    except Exception as e:
+        print(e)
         global err_msg
         err_msg += "・Security NEXT\n"
 
