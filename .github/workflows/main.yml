@@ -27,3 +27,4 @@ jobs:
           FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
           PASSWORD: ${{ secrets.PASSWORD }}
           TO_ADDRESS: ${{ secrets.TO_ADDRESS }}
+          TO_DEBUG_ADDRESS: ${{ secrets.TO_DEBUG_ADDRESS }}

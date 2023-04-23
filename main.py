@@ -1,275 +1,64 @@
-from bs4 import BeautifulSoup
-from datetime import datetime as dt
+from logic import HtmlHandler
+from mail import MailManager
+from collections import OrderedDict
 import datetime
-import mail
-import ssl
-import urllib.request
-
-# 記事クラス
-class Article:
-    def __init__(self, title, url, date):
-        self.title = title
-        self.url = url
-        self.date = date
-
-    def __eq__(self, __o: object):
-        if not isinstance(__o, Article):
-            return NotImplemented
-        return self.url == __o.url
-
-    def __ne__(self, __o: object):
-        return not self.__eq__(__o)
+from datetime import datetime as dt
+import os
 
 
-# html取得
-def get_content(url):
-    # SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED 対応
-    ctx = ssl.create_default_context()
-    ctx.options |= 0x4
+def make_mail(dict, msg, debug_flg):
+    subject = "[セキュリティ監視君]" + "/".join()
+    test = ""
+    for key, value in dict.items():
+        test.join("{}:{}".format(key, len(dict[key])))
 
-    res = urllib.request.urlopen(url, context=ctx)
-    soup = BeautifulSoup(res, "html.parser")
-    return soup
-
-
-# メール送信
-def make_mail(forest_lists, ipa_lists, jvn_lists, sn_lists):
     text = ""
-    subject = "[セキュリティ監視君]"
-    if len(forest_lists) != 0:
-        subject += "窓の杜:{}".format(len(forest_lists))
-    if len(ipa_lists) != 0:
-        subject += "/IPA:{}".format(len(ipa_lists))
-    if len(jvn_lists) != 0:
-        subject += "/JVN:{}".format(len(jvn_lists))
-    if len(sn_lists) != 0:
-        subject += "/Security NEXT:{}".format(len(sn_lists))
-
-    if len(forest_lists) != 0:
+    for key, value in dict.itmes():
         text += (
             "########################\n"
-            + "【窓の杜-インターネット/セキュリティ関連記事】\n"
+            + "{}\n".format(key)
             + "########################\n"
             + "----------\n"
         )
-        for l in forest_lists:
-            text += "{}\n{}\n".format(l.title, l.url)
+        for v in value:
+            text += "{}\n{}\n".format(v.title, v.url)
             text += "----------\n"
 
-    if len(ipa_lists) != 0:
-        text += (
-            "########################\n"
-            + "【IPA-重要なセキュリティ情報】\n"
-            + "########################\n"
-            + "----------\n"
-        )
-        for l in ipa_lists:
-            text += "{}\n{}\n".format(l.title, l.url)
-            text += "----------\n"
-
-    if len(jvn_lists) != 0:
-        text += (
-            "########################\n"
-            + "【JVN-脆弱性情報】\n"
-            + "########################\n"
-            + "----------\n"
-        )
-        for l in jvn_lists:
-            text += "{}\n{}\n".format(l.title, l.url)
-            text += "----------\n"
-
-    if len(sn_lists) != 0:
-        text += (
-            "########################\n"
-            + "【Security NEXT-新着記事】\n"
-            + "########################\n"
-            + "----------\n"
-        )
-        for l in sn_lists:
-            text += "{}\n{}\n".format(l.title, l.url)
-            text += "----------\n"
-
-    if err_msg != "":
+    if msg != "":
         text += (
             "########################\n"
             + "【データ取得エラー】\n"
             + "########################\n"
             + "----------\n"
-            + err_msg
+            + msg
         )
 
     # 件名調整
     if subject[11:12] == "/":
         subject = subject[:11] + subject[12:]
 
-    if debug_flg is False:
-        mail.send_mail(subject, text)
-
-
-# 窓の杜コンテンツ取得
-def get_forest_content(url, articles):
-    soup = get_content(url)
-    lists = soup.find_all("ul", class_="list-02")
-    lists = lists[4]
-    lists = lists.find_all("li")
-
-    for l in lists:
-        link = l.select_one("p.title > a")
-        date = l.select_one("p.date")
-        if link is not None and date is not None:
-            try:
-                url = link.get("href")
-                title = link.contents[0]
-                date = dt.strptime(date.contents[0], r"(%Y/%m/%d)")
-
-                # 重複チェック
-                exist_flg = False
-                for a in articles:
-                    if a.url == url:
-                        exist_flg = True
-                        break
-
-                if debug_flg is False:
-                    if yester_day == date:
-                        article = Article(title, url, date)
-                        if not exist_flg:
-                            articles.append(article)
-                else:
-                    article = Article(title, url, date)
-                    if not exist_flg:
-                        articles.append(article)
-
-            except IndexError:
-                None
-
-
-# 窓の杜
-def search_forest():
-    list_article = []
-    try:
-        get_forest_content(
-            url="https://forest.watch.impress.co.jp/category/internet/",
-            articles=list_article,
-        )
-        get_forest_content(
-            url="https://forest.watch.impress.co.jp/category/security/",
-            articles=list_article,
-        )
-    except Exception as e:
-        print(e)
-        global err_msg
-        err_msg += "・窓の杜\n"
-
-    return list_article
-
-
-# IPA
-def search_ipa():
-    list_article = []
-    try:
-        soup = get_content("https://www.ipa.go.jp/security/announce/alert.html")
-        lists = soup.find_all(class_="ipar_newstable")
-        lists = lists[0]
-        lists = lists.find_all("tr")
-
-        for l in lists:
-            url = "https://www.ipa.go.jp" + l.select_one("a").get("href")
-            title = l.select_one("a").contents[0]
-            date = dt.strptime(l.select_one("th").contents[0], r"%Y年%m月%d日")
-
-            if debug_flg is False:
-                if yester_day == date:
-                    article = Article(title, url, date)
-                    list_article.append(article)
-            else:
-                article = Article(title, url, date)
-                list_article.append(article)
-    except Exception as e:
-        print(e)
-        global err_msg
-        err_msg += "・IPA\n"
-
-    return list_article
-
-
-# JVN
-def search_jvn():
-    list_article = []
-    try:
-        soup = get_content("https://jvn.jp")
-        lists = soup.find_all(id="news-list")
-        lists = lists[0]
-        lists = lists.find_all("dl")
-
-        for l in lists:
-            url = "https://jvn.jp" + l.select_one("a").get("href")
-            title = l.select_one("a").contents[0]
-            date = dt.strptime(
-                l.select_one("li").contents[4], r"　[%Y/%m/%d %H:%M]"
-            ).replace(hour=0, minute=0, second=0, microsecond=0)
-
-            if debug_flg is False:
-                if yester_day == date:
-                    article = Article(title, url, date)
-                    list_article.append(article)
-            else:
-                article = Article(title, url, date)
-                list_article.append(article)
-    except Exception as e:
-        print(e)
-        global err_msg
-        err_msg += "・JVN\n"
-
-    return list_article
-
-
-# Security NEXT
-def search_sn():
-    list_article = []
-    try:
-        soup = get_content("https://www.security-next.com")
-        lists = soup.find_all(class_="content")[0].find_all("dl")[0].contents
-        for l in lists:
-            if l == "\n":
-                lists.remove("\n")
-
-        date = ""
-        for l in lists:
-            if l.name == "dt":
-                date = dt.strptime(l.text, r"%Y/%m/%d").replace(
-                    hour=0, minute=0, second=0, microsecond=0
-                )
-                continue
-            elif l.name == "dd":
-                url = l.contents[0].get("href")
-                title = l.text
-
-            if debug_flg is False:
-                if yester_day == date:
-                    article = Article(title, url, date)
-                    list_article.append(article)
-            else:
-                article = Article(title, url, date)
-                list_article.append(article)
-    except Exception as e:
-        print(e)
-        global err_msg
-        err_msg += "・Security NEXT\n"
-
-    return list_article
+    MailManager.send_mail(subject, text, debug_flg)
 
 
 if __name__ == "__main__":
-    debug_flg = False
-    err_msg = ""
-    yester_day = dt.today().replace(
+    yesterday = dt.today().replace(
         hour=0, minute=0, second=0, microsecond=0
     ) + datetime.timedelta(days=-1)
 
-    forest_lists = search_forest()
-    ipa_lists = search_ipa()
-    jvn_lists = search_jvn()
-    sn_lists = search_sn()
+    hm = HtmlHandler(day=yesterday, debug_flg=os.environ["DEBUG_FLG"])
+    od = OrderedDict(
+        {
+            "窓の杜": hm.search_forest(),
+            "JVN": hm.search_jvn(),
+            "IPA": hm.search_ipa(),
+            "SecurityNext": hm.search_sn(),
+        }
+    )
 
-    if (len(forest_lists) + len(ipa_lists) + len(jvn_lists) + len(sn_lists)) != 0:
-        make_mail(forest_lists, ipa_lists, jvn_lists, sn_lists)
+    if (
+        od["窓の杜"] != []
+        and od["JVN"] != []
+        and od["IPA"] != []
+        and od["Security Next"] != []
+    ):
+        make_mail(dict=od, msg=hm.err_msg, debug_flg=hm.debug_flg)
