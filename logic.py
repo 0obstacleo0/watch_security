@@ -25,7 +25,7 @@ class HtmlHandler:
         self.debug_flg = debug_flg
         self.err_msg = err_msg
 
-    def _get_content(url):
+    def _get_content(self, url):
         # SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED 対応
         ctx = ssl.create_default_context()
         ctx.options |= 0x4

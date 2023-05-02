@@ -4,6 +4,7 @@ from collections import OrderedDict
 import datetime
 from datetime import datetime as dt
 import os
+from distutils.util import strtobool
 
 
 def make_mail(dict, msg, debug_flg):
@@ -45,7 +46,8 @@ if __name__ == "__main__":
         hour=0, minute=0, second=0, microsecond=0
     ) + datetime.timedelta(days=-1)
 
-    hm = HtmlHandler(day=yesterday, debug_flg=os.environ["DEBUG_FLG"])
+    debug_flg = strtobool(os.environ["DEBUG_FLG"])
+    hm = HtmlHandler(day=yesterday, debug_flg=debug_flg)
     od = OrderedDict(
         {
             "窓の杜": hm.search_forest(),
@@ -56,9 +58,9 @@ if __name__ == "__main__":
     )
 
     if (
-        od["窓の杜"] != []
-        and od["JVN"] != []
-        and od["IPA"] != []
-        and od["Security Next"] != []
+        len(od["窓の杜"]) != 0
+        or len(od["JVN"]) != 0
+        or len(od["IPA"]) != 0
+        or len(od["Security Next"]) != 0
     ):
         make_mail(dict=od, msg=hm.err_msg, debug_flg=hm.debug_flg)
