@@ -8,13 +8,10 @@ from distutils.util import strtobool
 
 
 def make_mail(dict, msg, debug_flg):
-    subject = "[セキュリティ監視君]" + "/".join()
-    test = ""
-    for key, value in dict.items():
-        test.join("{}:{}".format(key, len(dict[key])))
+    subject = "[セキュリティ監視君]"
 
     text = ""
-    for key, value in dict.itmes():
+    for key, value in dict.items():
         text += (
             "########################\n"
             + "{}\n".format(key)
@@ -34,11 +31,8 @@ def make_mail(dict, msg, debug_flg):
             + msg
         )
 
-    # 件名調整
-    if subject[11:12] == "/":
-        subject = subject[:11] + subject[12:]
-
-    MailManager.send_mail(subject, text, debug_flg)
+    mm = MailManager()
+    mm.send_mail(subject, text, debug_flg)
 
 
 if __name__ == "__main__":
