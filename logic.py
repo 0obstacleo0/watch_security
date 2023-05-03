@@ -92,16 +92,19 @@ class HtmlHandler:
         list_article = []
         try:
             soup = self._get_content(
-                "https://www.ipa.go.jp/security/announce/alert.html"
+                "https://www.ipa.go.jp/security/security-alert/index.html"
             )
-            lists = soup.find_all(class_="ipar_newstable")
-            lists = lists[0]
-            lists = lists.find_all("tr")
+            list = soup.find(class_="news-list")
+            list = list.find_all("li")
 
-            for l in lists:
+            for l in list:
+                if l.attrs["class"][0] != "news-list__item":
+                    continue
+                title = l.select_one("p.news-list__ttl").text
                 url = "https://www.ipa.go.jp" + l.select_one("a").get("href")
-                title = l.select_one("a").contents[0]
-                date = dt.strptime(l.select_one("th").contents[0], r"%Y年%m月%d日")
+                date = dt.strptime(
+                    l.select_one("li.news-list__date").contents[0], r"%Y年%m月%d日"
+                )
 
                 if self.debug_flg is False:
                     if self.day == date:
