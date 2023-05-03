@@ -28,3 +28,4 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           TO_ADDRESS: ${{ secrets.TO_ADDRESS }}
           TO_DEBUG_ADDRESS: ${{ secrets.TO_DEBUG_ADDRESS }}
+          DEBUG_FLG: ${{ secrets.DEBUG_FLG }}
