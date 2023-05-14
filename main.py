@@ -57,6 +57,6 @@ if __name__ == "__main__":
         len(od["窓の杜"]) != 0
         or len(od["JVN"]) != 0
         or len(od["IPA"]) != 0
-        or len(od["Security Next"]) != 0
+        or len(od["SecurityNext"]) != 0
     ):
         make_mail(dict=od, msg=hm.err_msg, debug_flg=hm.debug_flg)

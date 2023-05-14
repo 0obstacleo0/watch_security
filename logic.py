@@ -56,7 +56,7 @@ class HtmlHandler:
                             exist_flg = True
                             break
 
-                    if self.debug_flg is False:
+                    if self.debug_flg == False:
                         if self.day == date:
                             article = Article(title, url, date)
                             if not exist_flg:
@@ -106,7 +106,7 @@ class HtmlHandler:
                     l.select_one("li.news-list__date").contents[0], r"%Y年%m月%d日"
                 )
 
-                if self.debug_flg is False:
+                if self.debug_flg == False:
                     if self.day == date:
                         article = Article(title, url, date)
                         list_article.append(article)
@@ -135,7 +135,7 @@ class HtmlHandler:
                     l.select_one("li").contents[4], r"　[%Y/%m/%d %H:%M]"
                 ).replace(hour=0, minute=0, second=0, microsecond=0)
 
-                if self.debug_flg is False:
+                if self.debug_flg == False:
                     if self.day == date:
                         article = Article(title, url, date)
                         list_article.append(article)
@@ -169,7 +169,7 @@ class HtmlHandler:
                     url = l.contents[0].get("href")
                     title = l.text
 
-                if self.debug_flg is False:
+                if self.debug_flg == False:
                     if self.day == date:
                         article = Article(title, url, date)
                         list_article.append(article)
